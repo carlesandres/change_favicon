@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>Change favicon</title>
+    </head>
+    <body>
+        <h1>Look ma! the favicon changes!</h1>
+        <article> See how the favicon changes every second </article>
+
+        <script>
+            var replaceFavicon = function(src){
+                document.head || (document.head = document.getElementsByTagName('head')[0]);
+                var link = document.createElement('link');
+                var oldLink = document.getElementById('dynamic-favicon');
+                link.id = 'dynamic-favicon';
+                link.rel = 'shortcut icon';
+                link.href = src;
+                if (oldLink) {
+                    document.head.removeChild(oldLink);
+                }
+                document.head.appendChild(link);
+            }
+
+            var createFavicon = function(color, letter){
+                color = color || 'black';
+                letter = letter || 't';
+                var canvas = document.createElement('canvas');
+                var ctx;
+                var strData;
+
+                canvas.setAttribute('width', 100);
+                canvas.setAttribute('height', 100);
+                ctx = canvas.getContext('2d');
+
+                ctx.arc( 50,50,50,0,2*Math.PI );
+                ctx.fillStyle = color;
+                ctx.fill();
+
+                // Draw letter
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold normal 90px monospace';
+                ctx.fillText(letter, 25, 75);
+
+                strData = canvas.toDataURL('image/png', 1.0);
+                replaceFavicon(strData);
+            };
+
+
+            // The code below is here only to make the dynamic changes noticeable
+            var firstIcon = true;
+            var iconProps = [
+                { color: 'blue', letter: 'a' },
+                { color: 'green', letter: 'b' }
+            ];
+
+            var createDifferentFavicon = function(){
+                firstIcon = !firstIcon;
+                if (firstIcon){
+                    createFavicon('blue', 'a');
+                    return;
+                }
+                createFavicon('red','b');
+            }
+
+            window.setInterval(createDifferentFavicon, 1000);
+        </script>
+    </body>
+</html>
